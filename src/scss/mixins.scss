@@ -1,0 +1,26 @@
+@mixin styleRemoval {
+  box-shadow: none;
+  outline: none;
+  background-color:transparent;
+}
+@mixin defaultText {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color:$text;
+}
+@mixin btnStyle {
+  padding: $size1;
+  border-radius: $size1;
+  background-color:$primary;
+  border: 1px solid $primary;
+  color: $textDark;
+  font-weight: bold;
+  border-radius: $size1;
+  &:hover {
+    cursor:pointer;
+    background-color: lighten($primary, 22%);
+    box-shadow: 0 0 11px $textDark;
+    transition: all 0.65s ease;
+  }
+}

@@ -1,5 +1,5 @@
 <template>
-	<h1>{{ title }}</h1>
+	<Header />
 	<form @submit.prevent="addTodo()">
 		<label>{{ newItemLabel }}</label>
 		<input
@@ -7,7 +7,7 @@
 			name="newTodo"
 			autocomplete="off"
 		>
-		<button>{{ addBtn }}</button>
+		<button class="submit">{{ addBtn }}</button>
 	</form>
 	<h2>{{ listTitle }}</h2>
 	<ul>
@@ -19,25 +19,29 @@
 				:class="{ done: todo.done }"
 				@click="doneTodo(todo)"
 			>{{ todo.content }}</span>
-			<button @click="removeTodo(index)">{{ removeBtn }}</button>
+			<button @click="removeTodo(index)" class="remove">{{ removeBtn }}</button>
 		</li>
 	</ul>
 	<h4 v-if="todos.length === 0">Empty list.</h4>
-	<h6>{{ footer }}</h6>
+	<Footer />
 </template>
 
 <script>
 	import { ref } from 'vue';
+  import Header from "./components/Header.vue";
+  import Footer from './components/Footer.vue';
 	export default {
 		name: 'App',
+    components: {
+      Header,
+      Footer
+    },
     data() {
       return {
-        title: "Simple ToDo App",
         newItemLabel: "New ToDo Item",
         addBtn: "Add New Item",
         listTitle: "Current ToDo List:",
         removeBtn: "Remove Item",
-		footer: "Lauren Elliott-Manheim • 2015-2022 • Ex astris, scientia"
       }
     },
 		setup () {
@@ -87,125 +91,93 @@
 </script>
 
 <style lang="scss">
-$border: 2px solid
-	rgba(
-		$color: white,
-		$alpha: 0.35,
-	);
-$size1: 6px;
-$size2: 12px;
-$size3: 18px;
-$size4: 24px;
-$size5: 48px;
-$backgroundColor:darken(#7D6B7D, 10%);
-$textColor:#FFF;
-$primaryColor:#A3A1AB;
-$secondTextColor: #1f2023;
-$accentColor:#FF665A;
-body {
-	margin: 0;
-	padding: 0;
-	font-family: Avenir, Helvetica, Arial, sans-serif;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	background-color: $backgroundColor;
-	color: $textColor;
-	#app {
-		max-width: 600px;
-		margin-top:60px;
-		margin-left: auto;
-		margin-right: auto;
-		padding: 20px;
-		h1 {
-			font-weight: bold;
-			font-size: 28px;
-			text-align: center;
-			margin-bottom:30px;
-		}
-		form {
-			display: flex;
-			flex-direction: column;
-			width: 100%;
-			label {
-				font-size: 14px;
-				font-weight: bold;
-			}
-			input,
-			button {
-				height: $size5;
-				box-shadow: none;
-				outline: none;
-				padding-left: $size2;
-				padding-right: $size2;
-				border-radius: $size1;
-				font-size: 18px;
-				margin-top: $size1;
-				margin-bottom: $size2;
-			}
-			input {
-				background-color: transparent;
-				border: $border;
-				color: inherit;
-
-        &:focus {
-          background-color:darken($backgroundColor, 8%);
+  @import "./scss/variables.scss";
+  @import "./scss/mixins.scss";
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: $background;
+    color: $text;
+    #app {
+      max-width: 600px;
+      margin-top:30px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 20px;
+      form {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        label {
+          font-size: 14px;
+          font-weight: bold;
         }
-			}
-		}
-		button {
-			background-color: $primaryColor;
-			border: 1px solid $primaryColor;
-			color: $secondTextColor;
-			font-weight: bold;
-			outline: none;
-			border-radius: $size1;
+        input,
+        button {
+          @include styleRemoval();
+          height: $size5;
+          padding-left: $size2;
+          padding-right: $size2;
+          border-radius: $size1;
+          font-size: 18px;
+          margin-top: $size1;
+          margin-bottom: $size2;
+        }
+        input {
+          border: $border;
+          color: inherit;
 
-      &:hover {
-        cursor:pointer;
-        background-color: lighten($primaryColor, 22%);
-        box-shadow: 0 0 11px $secondTextColor;
-        transition: all 0.65s ease;
+          &:focus {
+            background-color:darken($background, 8%);
+          }
+        }
+        button {
+          @include btnStyle();
+        }
       }
-		}
-		h2 {
-			font-size: 22px;
-			border-bottom: $border;
-			padding-bottom: $size1;
-		}
-		ul {
-			padding: 10px;
-			li {
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-				border: $border;
-				padding: $size2 $size4;
-				border-radius: $size1;
-				margin-bottom: $size2;
-				span {
-					cursor: pointer;
-				}
-				.done {
-					text-decoration:$accentColor line-through 2.5px;
-				}
-				button {
-					font-size: $size2;
-					padding: $size1;
-				}
-			}
-		}
-		h4 {
-			text-align: center;
-			opacity: 0.5;
-			margin: 0;
-		}
-		h6 {
-  			font-weight:400;
-			letter-spacing:2.25px;
-			text-transform:uppercase;
-			padding:16px;
-			text-align:center;
-		}
-	}
-}
+      h2 {
+        font-size: 22px;
+        border-bottom: $border;
+        display: inline-block;
+        margin:10px auto
+      }
+      ul {
+        padding: 0px 0 5px;
+        li {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          border: $border;
+          padding: $size2 $size4;
+          border-radius: $size1;
+          margin-bottom: $size2;
+          span {
+            cursor: pointer;
+          }
+          .done {
+            text-decoration:$accent line-through 2.5px;
+          }
+          button {
+            @include styleRemoval();
+            @include btnStyle();
+            font-size: $size2;
+          }
+        }
+      }
+      h4 {
+        text-align: center;
+        opacity: 0.5;
+        margin: 0;
+      }
+    }
+  }
+   // X-Small devices (portrait phones, less than 576px)
+  @media (max-width: 575.98px) {
+    body #app {
+      max-width:400px;
+    }
+  }
 </style>
